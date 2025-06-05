@@ -18,7 +18,7 @@ impl Default for App {
 impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            if ui.button("Tap").clicked() {
+            if ui.add_sized([200.0, 80.0], egui::Button::new("Tap")).clicked() {
                 let now = Instant::now();
                 let delta = now.duration_since(self.last_press);
                 self.last_press = now;
@@ -34,9 +34,15 @@ impl eframe::App for App {
 }
 
 fn main() -> Result<(), eframe::Error> {
-    let options = eframe::NativeOptions::default();
+    let options = eframe::NativeOptions {
+        viewport: egui::ViewportBuilder::default()
+            .with_inner_size([220.0, 120.0])
+            .with_resizable(false),
+        ..Default::default()
+    };
+
     eframe::run_native(
-        "BPM Button",
+        "BPM",
         options,
         Box::new(|_cc| Ok(Box::<App>::default())),
     )
